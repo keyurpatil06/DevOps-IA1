@@ -1,8 +1,9 @@
 {
   "name": "devops-ia1",
   "version": "1.0.0",
+  "description": "Selenium IDE + pipeline",
   "scripts": {
-    "test": "selenium-side-runner Keyur_DEVOPS_IA.side"
+    "test": "selenium-side-runner -c \"browserName=firefox moz:firefoxOptions.args=[-headless]\" Keyur_DEVOPS_IA.side"
   },
   "devDependencies": {
     "selenium-side-runner": "^4.0.13"
