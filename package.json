@@ -1,4 +1,9 @@
 {
+  "name": "devops-ia1",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "selenium-side-runner Keyur_DEVOPS_IA.side"
+  },
   "devDependencies": {
     "selenium-side-runner": "^4.0.13"
   }
