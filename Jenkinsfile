@@ -10,32 +10,30 @@ pipeline {
 
         stage('Setup Node.js') {
             steps {
-                // Install Node.js if not available (Linux Jenkins agent)
-                sh '''
-                    if ! command -v node &> /dev/null
-                    then
-                        curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-                        sudo apt-get install -y nodejs
-                    fi
+                bat '''
+                node -v
+                if %ERRORLEVEL% NEQ 0 (
+                    echo Node.js is not installed. Please install Node.js manually on Jenkins server.
+                    exit 1
+                )
                 '''
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                // Install selenium-side-runner + GeckoDriver (for Firefox)
-                sh '''
-                    npm install -g selenium-side-runner
-                    wget https://github.com/mozilla/geckodriver/releases/latest/download/geckodriver-v0.35.0-linux64.tar.gz
-                    tar -xvzf geckodriver-v0.35.0-linux64.tar.gz
-                    sudo mv geckodriver /usr/local/bin/
+                bat '''
+                npm install -g selenium-side-runner
+                curl -LO https://github.com/mozilla/geckodriver/releases/latest/download/geckodriver-v0.35.0-win64.zip
+                tar -xf geckodriver-v0.35.0-win64.zip
+                move geckodriver.exe C:\\Windows\\System32\\
                 '''
             }
         }
 
         stage('Run Selenium IDE Test') {
             steps {
-                sh 'selenium-side-runner Keyur_DEVOPS_IA.side'
+                bat 'selenium-side-runner Keyur_DEVOPS_IA.side'
             }
         }
     }
