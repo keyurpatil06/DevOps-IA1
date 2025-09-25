@@ -1,39 +1,27 @@
 pipeline {
     agent any
 
+    tools {
+        nodejs "NodeJs"
+    }
+
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/keyurpatil06/DevOps-IA1.git'
-            }
-        }
-
-        stage('Setup Node.js') {
-            steps {
-                bat '''
-                node -v
-                if %ERRORLEVEL% NEQ 0 (
-                    echo Node.js is not installed. Please install Node.js manually on Jenkins server.
-                    exit 1
-                )
-                '''
+                git branch: 'main',
+                    url: 'https://github.com/keyurpatil06/DevOps-IA1.git'
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                bat '''
-                npm install -g selenium-side-runner
-                curl -LO https://github.com/mozilla/geckodriver/releases/latest/download/geckodriver-v0.35.0-win64.zip
-                tar -xf geckodriver-v0.35.0-win64.zip
-                move geckodriver.exe C:\\Windows\\System32\\
-                '''
+                bat 'npm install'
             }
         }
 
-        stage('Run Selenium IDE Test') {
+        stage('Run Selenium IDE Tests') {
             steps {
-                bat 'selenium-side-runner Keyur_DEVOPS_IA.side'
+                bat 'npm test'
             }
         }
     }
@@ -41,6 +29,7 @@ pipeline {
     post {
         always {
             echo 'Cleaning up workspace...'
+            cleanWs() // removes workspace files after build
         }
         success {
             echo 'Selenium IDE test pipeline completed successfully!'
